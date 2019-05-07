@@ -246,9 +246,10 @@ export class DocumentCloner {
                 return style;
             }
         } catch (e) {
-            // accessing node.sheet.cssRules throws a DOMException
+            // accessing node.sheet.cssRules throws a SecurityError on FF
+            // or an Error 'Member not found' (with number -2147352573) on IE11
             this.logger.log('Unable to access cssRules property');
-            if (e.name !== 'SecurityError') {
+            if (e.name !== 'SecurityError' && e.number !== -2147352573) {
                 this.logger.log(e);
                 throw e;
             }
